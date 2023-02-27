@@ -5,14 +5,16 @@ from multiprocessing import Pool
 from PIL import Image
 import concurrent.futures
 
-## Delete file function
+"""Delete file function :"""
+
 def delete_file(file):
     try:
         os.remove(file)
     except Exception as e:
         print(f"Error deleting file {file}: {e}")
 
-## Deleting XML files :
+"""Deleting XML files :"""
+
 def delete_xml_files(directory, max_threads=10):
     # Recursively search for all .xml files in the specified directory and its subdirectories
     xml_files = []
@@ -32,7 +34,8 @@ def delete_xml_files(directory, max_threads=10):
         for dir in dirs:
             delete_xml_files(os.path.join(root, dir), max_threads)
 
-## Deleting unwanted images :
+"""Deleting unwanted images :"""
+
 def delete_unwanted_images(directory, max_threads=10):
     # Recursively search for all non-xml files in the specified directory and its subdirectories
     view_files = []
@@ -60,7 +63,7 @@ def delete_unwanted_images(directory, max_threads=10):
 
 
 
-## Cheking Number of images :
+"""Cheking Number of images :"""
 def calculate_stats(directory):
     def get_file_paths(directory):
         for root, dirs, files in os.walk(directory):
@@ -86,7 +89,8 @@ def calculate_stats(directory):
     print(f"Number of images: {images_count}")
     print(f"Total size of directory {directory}: {total_size_humanized}")
 
-## Cheking if the size of the images is the same :
+"""Cheking if the size of the images is the same :"""
+
 def check_images_size(directory):
     sizes = {}
     image_paths = []
