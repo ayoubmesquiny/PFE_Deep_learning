@@ -64,6 +64,7 @@ def delete_unwanted_images(directory, max_threads=10):
 
 
 """Cheking Number of images :"""
+
 def calculate_stats(directory):
     def get_file_paths(directory):
         for root, dirs, files in os.walk(directory):
