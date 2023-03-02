@@ -20,7 +20,7 @@ def delete_xml_files(directory, max_threads=10):
     xml_files = []
     for root, dirs, files in os.walk(directory):
         for file in files:
-            if file.endswith(".xml"):
+            if file.lower().endswith(".xml"):
                 xml_files.append(os.path.join(root, file))
 
     # Use a thread pool to delete the files with a maximum number of threads
