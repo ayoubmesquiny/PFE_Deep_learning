@@ -30,7 +30,6 @@ def load_base_model():
 
     return base_model
 
-
 def build_model(base_model, num_classes):
     # Build a new model on top of the pre-trained EfficientNetB7 model
     model = Sequential()
@@ -41,9 +40,9 @@ def build_model(base_model, num_classes):
 
     # Add dense layers with dropout and L2 regularization
     model.add(Dense(512, activation='relu', kernel_regularizer=l2(0.01)))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.25))
     model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.01)))
-    model.add(Dropout(0.5))
+    model.add(Dropout(0.25))
     model.add(Dense(num_classes, activation='softmax'))
 
     return model
@@ -65,7 +64,6 @@ def compile_model(model):
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     return model
-
 
 def create_train_datagen(img_width, img_height, batch_size):
     train_datagen = ImageDataGenerator(
@@ -123,7 +121,6 @@ def train_model(model, train_data, test_data, epochs, early_stop_patience):
     )
 
     return history
-
 
 def plot_training_loss(history, save_dir=None):
     # Plot the training and validation loss over the epochs
