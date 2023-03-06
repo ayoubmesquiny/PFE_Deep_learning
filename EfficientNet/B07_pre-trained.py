@@ -42,7 +42,7 @@ def load_base_model():
 
     return base_model
 
-def build_model(base_model, num_classes):
+def build_model(base_model):
     # Build a new model on top of the pre-trained EfficientNetB7 model
     model = Sequential()
     model.add(base_model)
@@ -52,10 +52,10 @@ def build_model(base_model, num_classes):
 
     # Add dense layers with dropout and L2 regularization
     model.add(Dense(512, activation='relu', kernel_regularizer=l2(0.01)))
-    model.add(Dropout(0.25))
     model.add(Dense(256, activation='relu', kernel_regularizer=l2(0.01)))
-    model.add(Dropout(0.25))
-    model.add(Dense(num_classes, activation='softmax'))
+    model.add(Dense(128, activation='relu', kernel_regularizer=l2(0.01)))
+    model.add(Dense(64, activation='relu', kernel_regularizer=l2(0.01)))
+    model.add(Dense(1, activation='sigmoid'))
 
     return model
 
@@ -73,7 +73,7 @@ def plot_model_architecture(model):
 def compile_model(model):
     # Compile the model
     optimizer = SGD(learning_rate=1e-4, momentum=0.9)
-    model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
+    model.compile(loss='binary_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     return model
 
@@ -172,7 +172,7 @@ def plot_training_accuracy(history, save_dir=None):
 
 
 base_model = load_base_model()
-model = build_model(base_model, num_classes)
+model = build_model(base_model)
 save_model_summary(model,'model_summary.txt')
 plot_model_architecture(model)
 model = compile_model(model)
