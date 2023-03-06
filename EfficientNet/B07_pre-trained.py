@@ -14,6 +14,18 @@ from keras.callbacks import EarlyStopping
 from keras.optimizers import SGD
 from keras.regularizers import l2
 
+# Define the path to the data directory
+data_dir = "C:/Users/DELL/Desktop/datatest/D-E"
+
+# Define the paths to the train and test directories
+train_dir = os.path.join(data_dir, "train")
+test_dir = os.path.join(data_dir, "test")
+
+# Define the input image size and number of classes
+img_width = 224
+img_height = 224
+batch_size = 4
+num_classes = 2
 
 
 def load_base_model():
@@ -60,7 +72,7 @@ def plot_model_architecture(model):
 
 def compile_model(model):
     # Compile the model
-    optimizer = SGD(lr=1e-4, momentum=0.9)
+    optimizer = SGD(learning_rate=1e-4, momentum=0.9)
     model.compile(loss='categorical_crossentropy', optimizer=optimizer, metrics=['accuracy'])
 
     return model
@@ -108,7 +120,9 @@ def load_data(img_width, img_height, batch_size):
 
 def train_model(model, train_data, test_data, epochs, early_stop_patience):
     # Define early stopping callback
-    early_stop = EarlyStopping(monitor=['val_loss', 'val_accuracy'], patience=early_stop_patience)
+    early_stop_loss = EarlyStopping(monitor='val_loss', patience=early_stop_patience)
+    early_stop_acc = EarlyStopping(monitor='val_accuracy', patience=early_stop_patience)
+
 
     # Train the model
     history = model.fit(
@@ -117,7 +131,7 @@ def train_model(model, train_data, test_data, epochs, early_stop_patience):
         steps_per_epoch=train_data.n // train_data.batch_size,
         validation_data=test_data,
         validation_steps=test_data.n // test_data.batch_size,
-        callbacks=[early_stop]
+        callbacks=[early_stop_loss, early_stop_acc]
     )
 
     return history
@@ -155,20 +169,6 @@ def plot_training_accuracy(history, save_dir=None):
         if not os.path.exists(save_dir):
             os.makedirs(save_dir)
         plt.savefig(os.path.join(save_dir, 'accuracy_plot.png'))
-
-
-# Define the path to the data directory
-data_dir = "C:/Users/DELL/Desktop/datatest/D-E"
-
-# Define the paths to the train and test directories
-train_dir = os.path.join(data_dir, "train")
-test_dir = os.path.join(data_dir, "test")
-
-# Define the input image size and number of classes
-img_width = 1280
-img_height = 720
-batch_size = 32
-num_classes = 2
 
 
 base_model = load_base_model()
